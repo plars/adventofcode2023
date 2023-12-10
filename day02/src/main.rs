@@ -1,7 +1,8 @@
 use std::cmp::max;
 
-fn part_a(data: &str) -> u32 {
+fn part_a(data: &str) -> (u32, u32) {
     let mut sum = 0;
+    let mut power_sum = 0;
     let mut game_number = 1;
     for line in data.lines() {
         let mut red = 0;
@@ -45,14 +46,16 @@ fn part_a(data: &str) -> u32 {
             );
             sum += game_number;
         }
+
+        power_sum += red * green * blue;
         game_number += 1;
     }
-    sum
+    (sum, power_sum)
 }
 
 fn main() {
     //let data = include_str!("../example1.txt");
     let data = include_str!("../input.txt");
-    let sum_a = part_a(data);
-    println!("Part a sum: {}", sum_a);
+    let (sum_a, power_sum) = part_a(data);
+    println!("Part a sum: {} power_sum: {}", sum_a, power_sum);
 }
