@@ -18,6 +18,7 @@ fn part_a(filename: &str) {
     let file = std::fs::File::open(filename).unwrap();
     let reader = std::io::BufReader::new(file);
     let mut symbols = Vec::new();
+    let mut gears = Vec::new();
     let mut parts = Vec::new();
     let mut y: i32 = 0;
     for line in reader.lines() {
@@ -51,7 +52,12 @@ fn part_a(filename: &str) {
                 continue;
             }
 
-            // if we get here, we have a symbol
+            // save the gears in a separate vector
+            if c == '*' {
+                gears.push(Symbol { x, y });
+            }
+
+            // push all symbols here, including gears
             symbols.push(Symbol { x, y });
         }
         // also handle the case where the line ends with a number
@@ -69,6 +75,8 @@ fn part_a(filename: &str) {
     }
     let sum = find_valid_parts(&parts, &symbols);
     println!("Part a sum: {}", sum);
+    let sum = find_gear_ratio_sum(&parts, &gears);
+    println!("Part b sum: {}", sum);
 }
 
 fn find_valid_parts(parts: &Vec<Part>, symbols: &Vec<Symbol>) -> i32 {
@@ -84,6 +92,38 @@ fn find_valid_parts(parts: &Vec<Part>, symbols: &Vec<Symbol>) -> i32 {
                 break;
             }
         }
+    }
+    sum
+}
+
+fn find_gear_ratio_sum(parts: &Vec<Part>, gears: &Vec<Symbol>) -> i32 {
+    let mut sum = 0;
+    for gear in gears {
+        let mut gear_ratio = 0;
+        let mut num_gears = 0;
+        let mut sum_for_this_gear = 0;
+        for part in parts {
+            if gear.x >= part.x - 1
+                && gear.x <= part.x + part.length as i32
+                && gear.y >= part.y - 1
+                && gear.y <= part.y + 1
+            {
+                num_gears += 1;
+                if num_gears > 2 {
+                    // this isn't valid, because it's next to more than to parts
+                    sum_for_this_gear = 0;
+                    break;
+                }
+                if num_gears == 1 {
+                    // first gear, just save the value
+                    gear_ratio = part.value;
+                    continue;
+                }
+                gear_ratio *= part.value;
+                sum_for_this_gear += gear_ratio;
+            }
+        }
+        sum += sum_for_this_gear;
     }
     sum
 }
