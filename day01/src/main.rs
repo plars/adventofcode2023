@@ -5,21 +5,21 @@ fn part_a(data: &str) {
         println!("{}", calibration_value);
         sum += calibration_value;
     }
-    println!("sum: {}", sum)
+    println!("part a sum: {}", sum)
 }
 fn get_calibration_value(line: &str) -> u32 {
     let mut first = 0;
     let mut last = 0;
     let mut v = Vec::new();
-    for c in line.chars().filter(|c| c.is_digit(10)) {
+    for c in line.chars().filter(|c| c.is_ascii_digit()) {
         v.push(c.to_digit(10).unwrap());
     }
-    if v.len() > 0 {
+    if !v.is_empty() {
         first = v[0];
         last = v[v.len() - 1];
     }
 
-    return first * 10 + last;
+    first * 10 + last
 }
 
 fn part_b(data: &str) {
@@ -65,7 +65,7 @@ fn part_b(data: &str) {
         let calibration_value = first * 10 + last;
         sum += calibration_value;
     }
-    println!("sum: {}", sum)
+    println!("part b sum: {}", sum)
 }
 
 fn main() {
