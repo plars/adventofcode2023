@@ -1,11 +1,10 @@
-fn part_a(data: &str) {
+fn part_a(data: &str) -> u32 {
     let mut sum = 0;
     for line in data.split_whitespace() {
         let calibration_value = get_calibration_value(line);
-        println!("{}", calibration_value);
         sum += calibration_value;
     }
-    println!("part a sum: {}", sum)
+    sum
 }
 fn get_calibration_value(line: &str) -> u32 {
     let mut first = 0;
@@ -22,7 +21,7 @@ fn get_calibration_value(line: &str) -> u32 {
     first * 10 + last
 }
 
-fn part_b(data: &str) {
+fn part_b(data: &str) -> u32 {
     let number_words = [
         "one", "1", "two", "2", "three", "3", "four", "4", "five", "5", "six", "6", "seven", "7",
         "eight", "8", "nine", "9",
@@ -65,11 +64,37 @@ fn part_b(data: &str) {
         let calibration_value = first * 10 + last;
         sum += calibration_value;
     }
-    println!("part b sum: {}", sum)
+    sum as u32
 }
 
 fn main() {
     let data = include_str!("../input.txt");
-    part_a(data);
-    part_b(data);
+    let answer = part_a(data);
+    println!("part a sum: {}", answer);
+    let answer = part_b(data);
+    println!("part b sum: {}", answer);
+}
+
+#[cfg(test)]
+#[test]
+fn test_part_a() {
+    let data = "1abc2
+pqr3stu8vwx
+a1b2c3d4e5f
+treb7uchet";
+    let answer = part_a(data);
+    assert_eq!(answer, 142);
+}
+
+#[test]
+fn test_part_b() {
+    let data = "two1nine
+eightwothree
+abcone2threexyz
+xtwone3four
+4nineeightseven2
+zoneight234
+7pqrstsixteen";
+    let answer = part_b(data);
+    assert_eq!(answer, 281);
 }
