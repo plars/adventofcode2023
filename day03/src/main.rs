@@ -14,7 +14,14 @@ struct Part {
     length: usize,
 }
 
-fn part_a(filename: &str) {
+fn main() {
+    let data_file = "input.txt";
+    let (sum_a, sum_b) = part_a_b(data_file);
+    println!("Part a sum: {}", sum_a);
+    println!("Part b sum: {}", sum_b);
+}
+
+fn part_a_b(filename: &str) -> (i32, i32) {
     let file = std::fs::File::open(filename).unwrap();
     let reader = std::io::BufReader::new(file);
     let mut symbols = Vec::new();
@@ -73,10 +80,9 @@ fn part_a(filename: &str) {
         }
         y += 1;
     }
-    let sum = find_valid_parts(&parts, &symbols);
-    println!("Part a sum: {}", sum);
-    let sum = find_gear_ratio_sum(&parts, &gears);
-    println!("Part b sum: {}", sum);
+    let sum_a = find_valid_parts(&parts, &symbols);
+    let sum_b = find_gear_ratio_sum(&parts, &gears);
+    (sum_a, sum_b)
 }
 
 fn find_valid_parts(parts: &Vec<Part>, symbols: &Vec<Symbol>) -> i32 {
@@ -128,8 +134,10 @@ fn find_gear_ratio_sum(parts: &Vec<Part>, gears: &Vec<Symbol>) -> i32 {
     sum
 }
 
-fn main() {
-    //let data_file = "example1.txt";
-    let data_file = "input.txt";
-    part_a(data_file);
+#[cfg(test)]
+#[test]
+fn test_part_a_b() {
+    let (sum_a, sum_b) = part_a_b("example1.txt");
+    assert_eq!(sum_a, 4361);
+    assert_eq!(sum_b, 467835);
 }
